@@ -1,0 +1,140 @@
+// written by Christopher Noller on February 8th 2016
+// testing windmill arduino project, version 3.0
+// EGR-103-300
+
+// define constants for direction of motors, speed of motors, and brake for motors
+// for example, pin 12 on the Arduino gets assigned to 'directionPinA' in the code
+#define directionPinA 12
+#define directionPinB 13
+#define speedPinA 3
+#define speedPinB 11
+#define brakePinA 9
+#define brakePinB 8
+
+// this is a mandatory setup function for Arduino
+// main purpose is to configure the pins you need on the Arduino to either input or output
+void setup()
+{
+  // configure all pins to being outputs (you can also configure pins to be inputs)
+  pinMode(directionPinA, OUTPUT);
+  pinMode(directionPinB, OUTPUT);
+  pinMode(speedPinA, OUTPUT);
+  pinMode(speedPinB, OUTPUT);
+  pinMode(brakePinA, OUTPUT);
+  pinMode(brakePinB, OUTPUT);
+}
+
+void Turn_Counter_Clockwise()
+{
+  // turn brakes off, set direction so motors turn counter clockwise, and set speed to maximum
+  // LOW indicates sending no voltage to that pin, HIGH indicates the opposite
+  // analog pins can accept a range from 0-255 (0 being no voltage and 255 being max voltage)
+  digitalWrite(brakePinA, LOW);
+  digitalWrite(brakePinB, LOW);
+  digitalWrite(directionPinA, HIGH);
+  digitalWrite(directionPinB, HIGH);
+  analogWrite(speedPinA, 255);
+  analogWrite(speedPinB, 255);
+}
+
+void Turn_Clockwise()
+{
+  // turn brakes off, set direction so motors turn clockwise, and set speed to maximum
+  digitalWrite(brakePinA, LOW);
+  digitalWrite(brakePinB, LOW);
+  digitalWrite(directionPinA, LOW);
+  digitalWrite(directionPinB, LOW);
+  analogWrite(speedPinA, 255);
+  analogWrite(speedPinB, 255);
+}
+
+void Turn_Same_Direction_1()
+{
+  // turn brakes off, set direction so motors turn in the same direction, and set speed to maximum
+  digitalWrite(brakePinA, LOW);
+  digitalWrite(brakePinB, LOW);
+  digitalWrite(directionPinA, LOW);
+  digitalWrite(directionPinB, HIGH);
+  analogWrite(speedPinA, 255);
+  analogWrite(speedPinB, 255);
+}
+
+void Turn_Same_Direction_2()
+{
+  // turn brakes off, set direction so motors turn in the same direction (opposite then previous function), and set speed to maximum
+  digitalWrite(brakePinA, LOW);
+  digitalWrite(brakePinB, LOW);
+  digitalWrite(directionPinA, HIGH);
+  digitalWrite(directionPinB, LOW);
+  analogWrite(speedPinA, 255);
+  analogWrite(speedPinB, 255);
+}
+
+void Spin_Only_One_1()
+{
+  // turn brakes off on one motor only, allow only the other motor to spin, and set speed to maximum
+  digitalWrite(brakePinA, LOW);
+  digitalWrite(brakePinB, HIGH);
+  digitalWrite(directionPinA, HIGH);
+  analogWrite(speedPinA, 255);
+  analogWrite(speedPinB, 0);
+}
+
+void Spin_Only_One_2()
+{
+  // turn brakes off on one motor only, allow only the other motor to spin, and set speed to maximum (for other motor then previous function)
+  digitalWrite(brakePinA, HIGH);
+  digitalWrite(brakePinB, LOW);
+  digitalWrite(directionPinB, HIGH);
+  analogWrite(speedPinA, 0);
+  analogWrite(speedPinB, 255);
+}
+  
+
+void Stop()
+{
+  // turn brake on, and speed off
+  digitalWrite(brakePinA, HIGH);
+  digitalWrite(brakePinB, HIGH);
+  analogWrite(speedPinA, 0);
+  analogWrite(speedPinB, 0);
+}
+
+// this is the mandatory loop for Arduino, this is where the functions executed
+void loop()
+{
+  // turn clockwise for 2 seconds
+  // delay is a function that will essentially “freeze” the code in place for a certain amount of time
+  // for example the segment below is executing “Turn_Clockwise()” and then freezing the code so
+  // that the “Turn_Clockwise()” function will execute for 2000 ms (which is just 2 seconds)
+  Turn_Clockwise();
+  delay(2000);
+  Stop();
+  delay(2000);
+  
+  // turn counter clockwise for 2 seconds
+  Turn_Counter_Clockwise();
+  delay(2000);
+  Stop();
+  delay(2000);
+  
+  // have motors turn same direction for 2 seconds, repeat going in the opposite direction
+  Turn_Same_Direction_1();
+  delay(2000);
+  Stop();
+  delay(2000);
+  Turn_Same_Direction_2();
+  delay(2000);
+  Stop();
+  delay(2000);
+  
+  // only spin 1 motor for 2 seconds, repeat for other motor
+  Spin_Only_One_1();
+  delay(2000);
+  Stop();
+  delay(2000);
+  Spin_Only_One_2();
+  delay(2000);
+  Stop();
+  delay(2000);
+}
